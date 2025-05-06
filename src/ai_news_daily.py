@@ -70,7 +70,7 @@ def translate_news_title(news_title: str) -> str:
 
 
 def summarize_news_content(news_content: str) -> str:
-    # 使用openai的gpt-4.1模型，对news_content进行总结
+    # 使用openai的gpt-4o模型，对news_content进行总结
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     response = client.responses.create(
         model="gpt-4o",
