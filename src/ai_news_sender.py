@@ -8,7 +8,7 @@ import schedule
 from dotenv import load_dotenv
 from datetime import datetime
 
-from ai_news_daily import news_run
+from news_handler import news_run
 
 load_dotenv()
 
@@ -39,7 +39,7 @@ def request_feishu():
                 [
                     {
                         "tag": "text",
-                        "text": str(i+1) + ". " + news['zh_title'] + "\n\n" + news['summary'] + "\n\n"
+                        "text": str(i+1) + ". " + news['zh_title'] + "(" + news['tag'] + ")" + "\n\n" + news['summary'] + "\n\n"
                     },
                     {
                         "tag": "a",
