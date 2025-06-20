@@ -29,28 +29,43 @@ def gen_sign():
 
 
 def request_feishu():
-    timestamp, sign = gen_sign()
+    try:
+        timestamp, sign = gen_sign()
 
-    news_list = news_run()
-    send_news_list = []
-    for i, news in enumerate(news_list):
-        send_news_list.append(
-            [
+        news_list = news_run()
+        send_news_list = []
+        for i, news in enumerate(news_list):
+            send_news_list.append(
+                [
+                    {
+                        "tag": "text",
+                        "text": str(i+1) + ". " + news['zh_title'] + "\n\n" + news['summary'] + "\n\n"
+                    },
+                    {
+                        "tag": "a",
+                        "text": "点击查看\n\n",
+                        "href": news['link']
+                    }
+                ]
+            )
+
+        if len(send_news_list) == 0:
+            print("No news to send")
+            send_news_list = [
                 {
                     "tag": "text",
-                    "text": str(i+1) + ". " + news['zh_title'] + "\n\n" + news['summary'] + "\n\n"
-                },
-                {
-                    "tag": "a",
-                    "text": "点击查看\n\n",
-                    "href": news['link']
+                    "text": "😭今日无AI新闻。"
                 }
             ]
-        )
-
-    if len(send_news_list) == 0:
-        print("No news to send")
-        return
+            return
+    except Exception as e:  # noqa: F841
+        print(e)
+        send_news_list = [
+            {
+                "tag": "text",
+                "text": "⚠️今日AI新闻获取失败，请手动执行！"
+            }
+        ]
 
     today_date = datetime.now().strftime("%Y-%m-%d")
     data = {
@@ -69,8 +84,8 @@ def request_feishu():
     headers = {
         "Content-Type": "application/json",
     }
-    result = requests.post(url, json=data, headers=headers)
-    print(result.json())
+    requests.post(url, json=data, headers=headers)
+    # print(result.json())
     return
 
 
